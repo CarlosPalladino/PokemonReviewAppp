@@ -6,6 +6,6 @@
         public string? FirstName { get; set; }
         public string? LastName { get; set;}
 
-        public ICollection<Review>? reviews { get; set; }
+        public ICollection<Review> reviews { get; set; }
     }
 }
