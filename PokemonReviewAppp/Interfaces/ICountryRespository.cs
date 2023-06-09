@@ -14,5 +14,10 @@ namespace PokemonReviewAppp.Interfaces
 
         bool CountryExits(int id);
 
+        bool CreateCountry(Country country);
+
+        bool Save(Country country);
+
+
     }
 }

@@ -9,15 +9,18 @@ namespace PokemonReviewAppp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OwnerController : ControllerBase
+    public class OwnerController : Controller
     {
 
         private readonly IMapper _mapper;
         private readonly IOwnerRepository _owner;
+        private readonly ICountryRespository _country;
 
-        public OwnerController(IOwnerRepository repository, IMapper mapper)
+
+
+        public OwnerController(IOwnerRepository repository,ICountryRespository CountryId, IMapper mapper)
         {
-
+            _country = CountryId;
             _mapper = mapper;
             _owner = repository;
         }
@@ -51,7 +54,7 @@ namespace PokemonReviewAppp.Controllers
         [HttpGet("{ownerId}/pokemon")]
         [ProducesResponseType(200, Type = typeof(Owner))]
         [ProducesResponseType(400)]
-        public IActionResult GetPokemonsByOwner(int ownerId)
+        public IActionResult GetPokemonByOwner(int ownerId)
         {
             if (!_owner.OwnerExists(ownerId))
             {
@@ -59,7 +62,7 @@ namespace PokemonReviewAppp.Controllers
             }
 
             var owner = _mapper.Map<List<PokemonDto>>(
-                _owner.GetPokemonsByOwner(ownerId));
+                _owner.GetPokemonByOwner(ownerId));
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -67,7 +70,42 @@ namespace PokemonReviewAppp.Controllers
             return Ok(owner);
         }
 
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateOwner([FromQuery] int CountryId,[FromBody] OwnerDto ownerCreate)
+        {
+            if (CreateOwner == null)
+                return BadRequest(ModelState);
+
+            var owner = _owner.GetOwners().Where(o => o.LastName.Trim().ToUpper() == ownerCreate.LastName.TrimEnd()
+            .ToUpper()).FirstOrDefault();
+
+
+           
+
+            if (owner != null)
+            {
+                ModelState.AddModelError("", "owner is already exists");
+                return StatusCode(422, ModelState);
+
+            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+
+            var ownerMap = _mapper.Map<Owner>(ownerCreate);
+
+            ownerMap.Country = _country.GetCountry(CountryId);
+            if (!_owner.CreateOwner(ownerMap))
+            {
+                ModelState.AddModelError("", "something happen while saving");
+                return StatusCode(422, ModelState);
+            }
+            return Ok("Success");
+
+
+        }
 
     }
-
 }

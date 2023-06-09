@@ -1,5 +1,4 @@
-﻿using PokemonReviewAppp.Models;
-
+﻿
 namespace PokemonReviewAppp.dto
 {
     public class PokemonDto

@@ -1,4 +1,5 @@
-﻿using PokemonReviewAppp.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PokemonReviewAppp.Data;
 using PokemonReviewAppp.Interfaces;
 using PokemonReviewAppp.Models;
 
@@ -13,36 +14,46 @@ namespace PokemonReviewAppp.Repository
             _context = context;
         }
 
-        public DataContext Context { get; }
-
         public Owner GetOwner(int ownerId)
         {
             return _context.Owners.Where(o => o.id == ownerId).FirstOrDefault();
         }
 
+        public ICollection<Owner> GetOwners()
+        {
+            return _context.Owners.ToList();
+        }
 
         public ICollection<Owner> GetOwnersOFAPokemon(int PokeId)
         {
             return _context.PokemonOwners.Where(p => p.Pokemon.Id == PokeId).Select(o => o.Owner).ToList();
         }
 
-        public ICollection<Owner> GetOwners()
-        {
-            return _context.Owners.ToList();
-
-        }
-
-
-
-        public ICollection<Pokemons> GetPokemonsByOwner(int ownerId)
+        public ICollection<Pokemons> GetPokemonByOwner(int ownerId)
         {
             return _context.PokemonOwners.Where(p => p.Owner.id == ownerId).Select(p => p.Pokemon).ToList();
-
         }
 
         public bool OwnerExists(int ownerId)
         {
             return _context.Owners.Any(o => o.id == ownerId);
+        }
+
+
+        public bool CreateOwner(Owner owner)
+        {
+            _context.Add(owner);
+            return Save(owner);
+
+        }
+
+        public bool Save(Owner owner)
+        {
+            {
+                var saved = _context.SaveChanges();
+
+                return saved > 0 ? true : false;
+            }
         }
     }
 }

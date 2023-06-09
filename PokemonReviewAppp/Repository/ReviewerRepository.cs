@@ -34,7 +34,7 @@ namespace PokemonReviewAppp.Repository
 
         public bool ReviewerExits(int reviewerId)
         {
-            throw new NotImplementedException();
+            return _context.Reviews.Any(r => r.Id == reviewerId);
         }
 
         public bool ReviewExists(int reviewerId)
@@ -42,7 +42,18 @@ namespace PokemonReviewAppp.Repository
             return _context.Reviewers.Any(r => r.Id == reviewerId);
         }
 
+        public bool CreateReviewer(Reviewer reviewerId)
+        {
+            _context.Reviewers.Add(reviewerId);
+            return Save(reviewerId);
+        }
 
+        public bool Save(Reviewer reviewer)
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+
+        }
 
     }
 }

@@ -61,6 +61,32 @@ namespace PokemonReviewAppp.Controllers
             return Ok(pokemon);
         }
 
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateCategory([FromBody] CategoriesDto categoryCreate)
+        {
+            if (CreateCategory == null)
+                return BadRequest(ModelState);
+                    var category = _category.GetCategories().Where(c=> c.Name.Trim().ToUpper() == categoryCreate.Name.TrimEnd()
+                    .ToUpper()).FirstOrDefault();
+            if(category != null)
+            {
+                ModelState.AddModelError("","category is already exists");
+                    return StatusCode(422, ModelState);
+
+            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var categoryMap = _mapper.Map<Category>(categoryCreate);
+                if(!_category.CreateCategory(categoryMap))
+            {
+                ModelState.AddModelError("","something happen while saving");
+                return StatusCode(422, ModelState);
+            }
+            return Ok("Success");
+        
+        }
 
 
 

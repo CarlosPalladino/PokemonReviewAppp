@@ -13,6 +13,7 @@ namespace PokemonReviewAppp.Repository
         {
             _context = context;
         }
+
         public ICollection<Pokemons> GetPokemons()
         {
             return _context.Pokemon.OrderBy(p => p.Id).ToList();
@@ -42,8 +43,37 @@ namespace PokemonReviewAppp.Repository
         public bool PokemonExists(int PokeId)
         {
 
-      return _context.Pokemon.Any(p => p.Id == PokeId);
+            return _context.Pokemon.Any(p => p.Id == PokeId);
 
         }
+
+
+        public bool CreatePokemon(Pokemons Pokemon, int ownerId, int categoryId)
+        {
+            var pokemonOwnerEntity = _context.Owners.Where(a => a.id == ownerId).FirstOrDefault();
+            var category = _context.Categories.Where(a => a.Id == categoryId).FirstOrDefault();
+
+            var pokemonOwner = new PokemonOwner()
+            {
+                Owner = pokemonOwnerEntity,
+                Pokemon = Pokemon,
+            };
+            var pokemonCategory = new PokemonCategory()
+            {
+                Category = category,
+                Pokemon = Pokemon,
+            };
+            _context.Add(Pokemon);
+            _context.Add(pokemonCategory);
+            return Save(Pokemon);
+        }
+
+
+        public bool Save(Pokemons Pokemon)
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
+
     }
 }
