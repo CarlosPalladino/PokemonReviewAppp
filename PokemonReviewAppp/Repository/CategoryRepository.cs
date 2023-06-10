@@ -38,8 +38,7 @@ namespace PokemonReviewAppp.Repository
         public bool CreateCategory(Category category)
         {
             _context.Add(category);
-            //_context.SaveChanges();
-         return    Save(category);
+            return Save(category);
         }
 
         public bool Save(Category category)
@@ -48,5 +47,12 @@ namespace PokemonReviewAppp.Repository
             return saved > 0 ? true : false;
         }
 
+        public bool UpdateCategory(Category category)
+
+        {
+            _context.Update(category);
+            return Save(category);
+
+        }
     }
 }

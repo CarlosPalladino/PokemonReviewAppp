@@ -11,11 +11,14 @@ namespace PokemonReviewAppp.Controllers
     public class PokemonController : ControllerBase
     {
         private readonly IPokemonRepository _repository;
+        
+
         private readonly IMapper _mapper;
-        public PokemonController(IPokemonRepository pokemonRepository, IMapper mapper)
+        public PokemonController(IPokemonRepository pokemonRepository, IMapper mapper, IOwnerRepository owner, ICategoryRepository category)
         {
             _repository = pokemonRepository;
             _mapper = mapper;
+      
         }
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Pokemons>))]
@@ -89,7 +92,42 @@ namespace PokemonReviewAppp.Controllers
 
 
         }
+        [HttpPut("{pokemonId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
 
+
+        public IActionResult UpdatePokemopn(int pokemonId, [FromQuery] int ownerId,
+            [FromQuery] int categoryId, [FromBody] PokemonDto updatepokemon)
+        {
+            if (updatepokemon == null)
+                return BadRequest(ModelState);
+
+            if (pokemonId != updatepokemon.Id)
+                return BadRequest(ModelState);
+
+            if (!_repository.PokemonExists(pokemonId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var pokemonMap = _mapper.Map<Pokemons>(updatepokemon);
+
+            if (!_repository.UpdatePokemon(pokemonMap, ownerId, categoryId))
+            {
+                ModelState.AddModelError("", "something went wrong updating");
+
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Update Success");
+
+
+
+
+
+        }
 
     }
 }

@@ -14,7 +14,7 @@ namespace PokemonReviewAppp.Controllers
         private readonly IMapper _mapper;
         private readonly IReviewerRepository _reviewers;
 
-      public ReviewerController(IReviewerRepository reviers, IMapper mapper)
+        public ReviewerController(IReviewerRepository reviers, IMapper mapper)
         {
             _reviewers = reviers;
             _mapper = mapper;
@@ -64,7 +64,7 @@ namespace PokemonReviewAppp.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateReviewer( [FromBody] ReviewerDto reviewerCreate)
+        public IActionResult CreateReviewer([FromBody] ReviewerDto reviewerCreate)
         {
             if (CreateReviewer == null)
                 return BadRequest(ModelState);
@@ -92,6 +92,37 @@ namespace PokemonReviewAppp.Controllers
             }
             return Ok("Success");
 
+
+        }
+        [HttpPut("{reviewerId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+
+        public IActionResult UpdateReview(int reviewerId,
+      [FromBody] ReviewerDto updatereviewer)
+        {
+            if (updatereviewer == null)
+                return BadRequest(ModelState);
+
+            if (reviewerId != updatereviewer.Id)
+                return BadRequest(ModelState);
+
+            if (!_reviewers.ReviewerExits(reviewerId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var reviewerMap = _mapper.Map<Reviewer>(updatereviewer);
+
+            if (!_reviewers.UpdateReviewe(reviewerMap))
+            {
+                ModelState.AddModelError("", "something went wrong updating");
+
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Update Success");
 
         }
     }

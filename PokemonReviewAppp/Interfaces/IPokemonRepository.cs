@@ -16,6 +16,7 @@ namespace PokemonReviewAppp.Interfaces
 
         bool CreatePokemon(Pokemons Pokemon, int ownerId, int categoryId);
 
+        bool UpdatePokemon(Pokemons Pokemon, int ownerId, int categoryId);
         bool Save(Pokemons Pokemon);
 
     }

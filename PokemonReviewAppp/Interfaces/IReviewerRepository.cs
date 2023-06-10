@@ -13,6 +13,8 @@ namespace PokemonReviewAppp.Interfaces
 
         bool CreateReviewer(Reviewer reviewerId);
 
+        bool UpdateReviewe(Reviewer reviewer);
+
         bool Save(Reviewer reviewer);
 
 

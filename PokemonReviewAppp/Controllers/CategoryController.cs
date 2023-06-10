@@ -56,7 +56,7 @@ namespace PokemonReviewAppp.Controllers
             var pokemon = _mapper.Map<List<PokemonDto>>(
                 _category.GetPokemonsByCategory(categoryId));
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(pokemon);
         }
@@ -68,25 +68,54 @@ namespace PokemonReviewAppp.Controllers
         {
             if (CreateCategory == null)
                 return BadRequest(ModelState);
-                    var category = _category.GetCategories().Where(c=> c.Name.Trim().ToUpper() == categoryCreate.Name.TrimEnd()
-                    .ToUpper()).FirstOrDefault();
-            if(category != null)
+            var category = _category.GetCategories().Where(c => c.Name.Trim().ToUpper() == categoryCreate.Name.TrimEnd()
+            .ToUpper()).FirstOrDefault();
+            if (category != null)
             {
-                ModelState.AddModelError("","category is already exists");
-                    return StatusCode(422, ModelState);
+                ModelState.AddModelError("", "category is already exists");
+                return StatusCode(422, ModelState);
 
             }
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var categoryMap = _mapper.Map<Category>(categoryCreate);
-                if(!_category.CreateCategory(categoryMap))
+            if (!_category.CreateCategory(categoryMap))
             {
-                ModelState.AddModelError("","something happen while saving");
+                ModelState.AddModelError("", "something happen while saving");
                 return StatusCode(422, ModelState);
             }
             return Ok("Success");
-        
+
         }
+        [HttpPut("{categoryId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+
+
+        public IActionResult UpdateCategory(int categoryId,[FromBody] CategoriesDto updatecategory)
+        {
+            if (updatecategory == null)
+                return BadRequest(ModelState);
+
+            if (categoryId != updatecategory.Id)
+               return BadRequest(ModelState);
+
+            if (!_category.CategoriesExists(categoryId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var categoryMap = _mapper.Map<Category>(updatecategory);
+
+            if(_category.UpdateCategory(categoryMap))
+            {
+                ModelState.AddModelError("", "something went wrong updating");
+
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Update Success");
 
 
 
@@ -96,5 +125,7 @@ namespace PokemonReviewAppp.Controllers
 
 
 
+
+        }
     }
 }

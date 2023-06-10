@@ -15,7 +15,12 @@ namespace PokemonReviewAppp.Interfaces
 
         bool CreateReview(Review reviewId);
 
+
+        bool UpdateReview(Review review);
+        
+        
         bool Save(Review review);
+
 
     }
 }

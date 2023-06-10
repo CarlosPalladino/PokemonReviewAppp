@@ -19,5 +19,9 @@ namespace PokemonReviewAppp.Interfaces
 
         bool Save(Owner owner);
 
+        bool Update(Owner owner);   
+
+
+
     }
 }
