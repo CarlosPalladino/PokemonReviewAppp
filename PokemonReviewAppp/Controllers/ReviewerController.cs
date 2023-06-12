@@ -125,5 +125,31 @@ namespace PokemonReviewAppp.Controllers
             return Ok("Update Success");
 
         }
+        [HttpDelete("{reviewerId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+
+        public IActionResult DeleteReview(int reviewerId)
+        {
+            if (!_reviewers.ReviewerExits(reviewerId))
+            {
+                return NotFound();
+
+            }
+            var reviewToDelete = _reviewers.GetReviewers(reviewerId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (!_reviewers.Delete(reviewToDelete))
+            {
+                ModelState.AddModelError("", "Somethinng happen went  wrong deleting country");
+
+            }
+            return Ok("delete Success");
+        }
+
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PokemonReviewAppp.Data;
+using PokemonReviewAppp.dto;
 using PokemonReviewAppp.Interfaces;
 using PokemonReviewAppp.Models;
 
@@ -83,5 +84,16 @@ namespace PokemonReviewAppp.Repository
 
         }
 
+        public bool Delete(Pokemons Pokemon)
+        {
+            _context.Remove(Pokemon);
+            return Save(Pokemon);
+
+        }
+
+        public Pokemons GetPokemonTrimToUpper(PokemonDto pokemonCreate)
+        {
+            return GetPokemons().Where(c => c.Name.Trim().ToUpper() == pokemonCreate.Name.TrimEnd().ToUpper()).FirstOrDefault();
+        }
     }
 }

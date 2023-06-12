@@ -11,14 +11,15 @@ namespace PokemonReviewAppp.Controllers
     public class PokemonController : ControllerBase
     {
         private readonly IPokemonRepository _repository;
-        
+        private readonly IReviewRepository _reviews;
 
         private readonly IMapper _mapper;
-        public PokemonController(IPokemonRepository pokemonRepository, IMapper mapper, IOwnerRepository owner, ICategoryRepository category)
+        public PokemonController(IPokemonRepository pokemonRepository, IMapper mapper, IReviewRepository review)
         {
             _repository = pokemonRepository;
             _mapper = mapper;
-      
+            _reviews = review;
+
         }
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Pokemons>))]
@@ -66,7 +67,8 @@ namespace PokemonReviewAppp.Controllers
             if (CreatePokemon == null)
                 return BadRequest(ModelState);
 
-            var owner = _repository.GetPokemons().Where(p => p.Name.Trim().ToUpper() == pokemonCreate.Name.TrimEnd()
+            var owner = _repository.GetPokemons()
+                .Where(p => p.Name.Trim().ToUpper() == pokemonCreate.Name.TrimEnd()
             .ToUpper()).FirstOrDefault();
 
 
@@ -122,12 +124,49 @@ namespace PokemonReviewAppp.Controllers
                 return StatusCode(500, ModelState);
             }
             return Ok("Update Success");
+        }
+
+        [HttpDelete("{pokemonId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+
+        public IActionResult DeletePokemon(int pokemonId)
+        {
+            if (!_repository.PokemonExists(pokemonId))
+            {
+                return NotFound();
+
+            }
+
+            var reviewsToDelete = _reviews.GetReviewsOfAPokemon(pokemonId);
+            var ownerToDelete = _repository.GetPokemons(pokemonId);
+
+
+            if (!ModelState.IsValid)
+
+                return BadRequest(ModelState);
+
+            if (!_reviews.DeleteReviews(reviewsToDelete.ToList())){
+
+                ModelState.AddModelError("", "something went wrong deling reviews");
+            }
+
+            if (!_repository.Delete(ownerToDelete))
+            {
+                ModelState.AddModelError("", "Somethinng happen went  wrong deleting country");
+
+            }
+            return Ok("delete Success");
+
+
 
 
 
 
 
         }
+
+
 
     }
 }

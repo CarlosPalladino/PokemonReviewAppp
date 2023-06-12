@@ -54,5 +54,12 @@ namespace PokemonReviewAppp.Repository
             return Save(category);
 
         }
+
+        public bool Delete(Category category)
+        {
+            _context.Remove(category);
+            return Save(category);
+
+        }
     }
 }

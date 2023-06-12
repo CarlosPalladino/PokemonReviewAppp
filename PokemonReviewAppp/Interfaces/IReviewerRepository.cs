@@ -17,6 +17,6 @@ namespace PokemonReviewAppp.Interfaces
 
         bool Save(Reviewer reviewer);
 
-
+        bool Delete(Reviewer reviewer);
     }
 }

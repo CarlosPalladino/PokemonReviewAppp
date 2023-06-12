@@ -21,6 +21,7 @@ namespace PokemonReviewAppp.Interfaces
 
         bool Update(Owner owner);   
 
+        bool Delete(Owner owner);
 
 
     }
