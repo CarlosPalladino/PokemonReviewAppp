@@ -109,7 +109,7 @@ namespace PokemonReviewAppp.Controllers
 
             var categoryMap = _mapper.Map<Category>(updatecategory);
 
-            if (_category.UpdateCategory(categoryMap))
+            if (!_category.UpdateCategory(categoryMap))
             {
                 ModelState.AddModelError("", "something went wrong updating");
 
@@ -117,6 +117,8 @@ namespace PokemonReviewAppp.Controllers
             }
             return Ok("Update Success");
         }
+
+
         [HttpDelete("{categoryId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]

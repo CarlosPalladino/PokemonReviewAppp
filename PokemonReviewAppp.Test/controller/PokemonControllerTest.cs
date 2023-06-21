@@ -6,6 +6,7 @@ using PokemonReviewAppp.Controllers;
 using PokemonReviewAppp.dto;
 using PokemonReviewAppp.Interfaces;
 using PokemonReviewAppp.Models;
+using PokemonReviewAppp.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,42 +48,27 @@ namespace PokemonReviewAppp.Test.controller
         }
 
         [Fact]
-        public void PokemonController_CreatePoke_ReturnOk()
+        public void PokemonController_CreatePokemon_ReturnOK()
         {
-            int owner = 1;
+            //Arrange
+            int ownerId = 1;
             int catId = 2;
             var pokemonMap = A.Fake<Pokemons>();
             var pokemon = A.Fake<Pokemons>();
             var pokemonCreate = A.Fake<PokemonDto>();
             var pokemons = A.Fake<ICollection<PokemonDto>>();
-            var pokeList = A.Fake<List<PokemonDto>>();
-            A.CallTo(() => _repository.GetPokemons().Where(p => p.Name.Trim().ToUpper() == pokemonCreate.Name.TrimEnd()
-             .ToUpper()).FirstOrDefault()).Returns(pokemon);
+            var pokmonList = A.Fake<IList<PokemonDto>>();
+            A.CallTo(() => _repository.GetPokemonTrimToUpper(pokemonCreate)).Returns(pokemon);
             A.CallTo(() => _mapper.Map<Pokemons>(pokemonCreate)).Returns(pokemon);
-            A.CallTo(() => _repository.CreatePokemon(pokemonMap, owner, catId)).Returns(true);
-
+            A.CallTo(() => _repository.CreatePokemon(pokemonMap, ownerId,catId)).Returns(true);
             var controller = new PokemonController(_repository, _mapper, _reviews);
 
-            var result = controller.CreatePokemon(owner, catId, pokemonCreate);
+            //Act
+            var result = controller.CreatePokemon(ownerId, catId, pokemonCreate);
 
+            //Assert
             result.Should().NotBeNull();
         }
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
