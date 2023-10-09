@@ -12,6 +12,8 @@ namespace PokemonReviewAppp.Controllers
     [ApiController]
     public class CategoryController : Controller
     {
+        
+
         private readonly ICategoryRepository _category;
         private readonly IMapper _mapper;
 
@@ -78,6 +80,7 @@ namespace PokemonReviewAppp.Controllers
             }
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
             var categoryMap = _mapper.Map<Category>(categoryCreate);
             if (!_category.CreateCategory(categoryMap))
             {
