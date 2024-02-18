@@ -71,9 +71,6 @@ namespace PokemonReviewAppp.Controllers
                 .Where(p => p.Name.Trim().ToUpper() == pokemonCreate.Name.TrimEnd()
             .ToUpper()).FirstOrDefault();
 
-
-
-
             if (owner != null)
             {
                 ModelState.AddModelError("", "pokemon is already exists");

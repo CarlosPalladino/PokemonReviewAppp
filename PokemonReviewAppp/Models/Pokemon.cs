@@ -13,11 +13,15 @@ namespace PokemonReviewAppp.Models
 
         public string Image { get; set; }
 
+        public string Tipo {  get; set; }
+        public string Debilidad { get; set; }
         public ICollection<Review> Reviews { get; set; }
 
         public ICollection<PokemonOwner> PokemonOwners { get; set; }
 
         public ICollection<PokemonCategory> PokemonCategories { get; set; }
+
+
 
     }
 

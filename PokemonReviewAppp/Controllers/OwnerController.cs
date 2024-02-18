@@ -51,23 +51,20 @@ namespace PokemonReviewAppp.Controllers
             return Ok(owners);
         }
 
-        [HttpGet("{ownerId}/pokemon")]
-        [ProducesResponseType(200, Type = typeof(Owner))]
+        [HttpGet("pokemon/{ownerId}")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Pokemons>))]
         [ProducesResponseType(400)]
         public IActionResult GetPokemonByOwner(int ownerId)
         {
-            if (!_owner.OwnerExists(ownerId))
-            {
-                return NotFound();
-            }
+         
 
-            var owner = _mapper.Map<List<PokemonDto>>(
+            var pokemon = _mapper.Map<List<PokemonDto>>(
                 _owner.GetPokemonByOwner(ownerId));
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(owner);
+            return Ok(pokemon);
         }
 
         [HttpPost]

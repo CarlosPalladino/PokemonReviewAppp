@@ -12,7 +12,7 @@ namespace PokemonReviewAppp.Controllers
     [ApiController]
     public class CategoryController : Controller
     {
-        
+
 
         private readonly ICategoryRepository _category;
         private readonly IMapper _mapper;

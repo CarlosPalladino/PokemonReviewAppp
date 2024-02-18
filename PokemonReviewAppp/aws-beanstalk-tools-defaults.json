@@ -1,0 +1,15 @@
+
+{
+    "region" : "us-east-2",
+    "configuration" : "Debug",
+    "framework"     : "net8.0",
+    "self-contained" : false,
+    "application"    : "poke8",
+    "environment"    : "Poke8-env",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "enhanced",
+    "additional-options"   : "",
+    "proxy-server"         : "nginx",
+    "app-path"             : "/",
+    "iis-website"          : "Default Web Site"
+}

@@ -9,5 +9,10 @@ namespace PokemonReviewAppp.dto
         public DateTime BirthDate { get; set; }
 
         public string Image {  get; set; }
+
+        public String Tipo { get; set; }
+        public String Debilidad { get; set; }
+
+
     }
 }
