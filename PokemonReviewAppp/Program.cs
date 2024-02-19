@@ -1,15 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using PokemonReviewAppp;
-using PokemonReviewAppp.Data;
 using PokemonReviewApp;
+using PokemonReviewAppp.Data;
 using PokemonReviewAppp.Interfaces;
 using PokemonReviewAppp.Repository;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
-////Add services to the container.
-
+// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -24,44 +21,35 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowMyOrigin",
         builder => builder.WithOrigins("http://localhost:4200")
-                              .WithMethods("GET", "POST", "PUT", "DELETE")
-                              .WithHeaders("Content-Type"));
+                          .WithMethods("GET", "POST", "PUT", "DELETE")
+                          .WithHeaders("Content-Type"));
 });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Your API", Version = "v1" });
+});
+
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Defaultconnection"));
 });
+
 var app = builder.Build();
 
-
-if (args.Length == 1 && args[0].ToLower() == "seeddata")
-    SeedData(app);
-
-void SeedData(IHost app)
-{
-    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-
-    using (var scope = scopedFactory.CreateScope())
-    {
-        var service = scope.ServiceProvider.GetService<Seed>();
-        service.SeedDataContext();
-    }
-}
 // Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
+});
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
-    app.UseCors("AllowMyOrigin");
+app.UseCors("AllowMyOrigin");
 
-    app.UseAuthorization();
+app.UseAuthorization();
 
+app.MapControllers();
 
-    app.MapControllers();
-
-    app.Run();
-
+app.Run();
