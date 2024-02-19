@@ -29,10 +29,6 @@
 //                          .WithHeaders("Content-Type"));
 //});
 
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Your API", Version = "v1" });
-//});
 //builder.Services.ConfigureSwaggerGen(setup =>
 //{
 //    setup.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
