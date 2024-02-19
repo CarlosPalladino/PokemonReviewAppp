@@ -1,13 +1,12 @@
 {
   "dependencies": {
     "secrets1": {
-      "type": "secrets"
-    },
-    "apis1": {
-      "type": "apis"
+      "type": "secrets.user"
     },
     "mssql1": {
-      "type": "mssql",
+      "serviceConnectorResourceId": "",
+      "secretStore": "LocalSecretsFile",
+      "type": "mssql.local",
       "connectionId": "ConnectionStrings:defaultConnection",
       "dynamicId": null
     }

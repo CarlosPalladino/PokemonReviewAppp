@@ -110,7 +110,7 @@ namespace PokemonReviewApp
                         }
                     }
                 };
-                dataContext.PokemonOwners.AddRange(pokemonOwners);
+                dataContext.PokemonOwners.AddRange((IEnumerable<PokemonReviewAppp.PokemonOwner>)pokemonOwners);
                 dataContext.SaveChanges();
             }
         }

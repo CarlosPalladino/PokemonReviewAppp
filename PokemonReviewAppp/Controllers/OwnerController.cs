@@ -114,7 +114,7 @@ namespace PokemonReviewAppp.Controllers
             if (updateowner == null)
                 return BadRequest(ModelState);
 
-            if (ownerId != updateowner.id)
+            if (ownerId != updateowner.Id)
                 return BadRequest(ModelState);
 
             if (!_owner.OwnerExists(ownerId))

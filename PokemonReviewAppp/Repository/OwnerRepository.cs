@@ -16,7 +16,7 @@ namespace PokemonReviewAppp.Repository
 
         public Owner GetOwner(int ownerId)
         {
-            return _context.Owners.Where(o => o.id == ownerId).FirstOrDefault();
+            return _context.Owners.Where(o => o.Id == ownerId).FirstOrDefault();
         }
 
         public ICollection<Owner> GetOwners()
@@ -36,7 +36,7 @@ namespace PokemonReviewAppp.Repository
 
         public bool OwnerExists(int ownerId)
         {
-            return _context.Owners.Any(o => o.id == ownerId);
+            return _context.Owners.Any(o => o.Id == ownerId);
         }
 
 

@@ -1,16 +1,61 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PokemonReviewApp;
+using PokemonReviewAppp.Data;
+using PokemonReviewAppp.Interfaces;
+using PokemonReviewAppp.Repository;
 
-namespace PokemonReviewAppp
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddTransient<Seed>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IPokemonRepository, PokemonRepository>();
+builder.Services.AddScoped<ICountryRespository, CountryRespository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
+builder.Services.AddScoped<IReviewerRepository, ReviewerRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+
+builder.Services.AddCors(options =>
 {
-    public class Startup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
-        }
+    options.AddPolicy("AllowMyOrigin",
+        builder => builder.WithOrigins("http://localhost:4200")
+                          .WithMethods("GET", "POST", "PUT", "DELETE")
+                          .WithHeaders("Content-Type"));
+});
 
-        public void Configure(IApplicationBuilder app)
-        {
-        }
-    }
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Your API", Version = "v1" });
+});
+
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Defaultconnection"));
+});
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
+    });
 }
+
+
+app.UseHttpsRedirection();
+
+app.UseCors("AllowMyOrigin");
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
