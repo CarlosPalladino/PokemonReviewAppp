@@ -9,6 +9,7 @@ namespace PokemonReviewAppp.Controllers
 
 
     [Route("api/[controller]")]
+
     [ApiController]
     public class CategoryController : Controller
     {

@@ -27,9 +27,14 @@ builder.Services.AddCors(options =>
                           .WithHeaders("Content-Type"));
 });
 
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen();
+builder.Services.ConfigureSwaggerGen(setup =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Your API", Version = "v1" });
+    setup.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Poke app",
+        Version = "v1"
+    });
 });
 
 builder.Services.AddDbContext<DataContext>(options =>
@@ -38,15 +43,12 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 var app = builder.Build();
+app.UseSwagger();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
-    });
+    app.UseSwaggerUI();
 }
 
 
