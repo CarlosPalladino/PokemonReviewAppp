@@ -36,7 +36,7 @@ namespace PokemonReviewAppp.Repository
         public Country GetCountryByOwner(int ownerId)
         {
 
-            return _context.Owners.Where(o => o.Id == ownerId).Select(c => c.Country).FirstOrDefault();
+            return _context.Owners.Where(o => o.id == ownerId).Select(c => c.Country).FirstOrDefault();
         }
 
         public ICollection<Owner> GetOwnersFromCountry(int countryId)
