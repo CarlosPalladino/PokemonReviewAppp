@@ -16,7 +16,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '4.0.x'  # Utiliza la versión adecuada de .NET para tu aplicación
+        dotnet-version: '8.0.x'  # Utiliza la versión adecuada de .NET para tu aplicación
 
     - name: Restore dependencies
       run: dotnet restore
