@@ -1,4 +1,4 @@
-# ¿Qué es PokemeonReviewAppp?
+# ¿Qué es PokemonReviewAppp?
 Este proyecto es una web api creada en .Net core 6  y utiliza una migración a la base de datos hechas con Entity Framework
 
 ## Descripción
