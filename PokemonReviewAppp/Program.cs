@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using PokemonReviewApp;
 using PokemonReviewAppp.Data;
@@ -8,19 +7,18 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Agregar servicios al contenedor.
 builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 
-//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IPokemonRepository, PokemonRepository>();
 builder.Services.AddScoped<ICountryRespository, CountryRespository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
 builder.Services.AddScoped<IReviewerRepository, ReviewerRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
-
+builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowMyOrigin",
@@ -28,30 +26,23 @@ builder.Services.AddCors(options =>
                           .WithMethods("GET", "POST", "PUT", "DELETE")
                           .WithHeaders("Content-Type"));
 });
-
-builder.Services.ConfigureSwaggerGen(setup =>
-{
-    setup.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
-        Title = "Poke app",
-        Version = "v1"
-    });
-});
+builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Defaultconnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Connection"));
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure el pipeline de solicitudes HTTP.
 app.UseSwagger();
-if (app.Environment.IsDevelopment())
+app.UseSwaggerUI(c =>
 {
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    c.RoutePrefix = string.Empty;
+});
 
 app.UseHttpsRedirection();
 
