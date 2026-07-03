@@ -8,4 +8,4 @@ Este proyecto es una web api creada en .Net core 6  y utiliza una migración a l
 El objetivo principal de este proyecto es aprender a utilizar las tecnologías y prácticas comunes en el desarrollo de aplicaciones en .NET Core. aprender  el uso de la inyección de dependencias, el empleo de AutoMapper para la manipulación de datos y la aplicación de consultas LINQ en los controladores para que sea legible y escable a futuro
 
 ## Tecnologías
-Utilicé **.Net core 6**,**Entity Framework**y**AutoMapper**
+Utilicé **.Net &**,**Entity Framework**y**AutoMapper**
